@@ -30,7 +30,7 @@ export const INITIAL_SETTINGS: CommunitySettings = {
 };
 
 export const INITIAL_STATISTICS: CommunityStatistics = {
-  id: '1',
+  id: '11111111-1111-1111-1111-111111111111',
   students_reached: 700,
   community_members: 10,
   events: 2,

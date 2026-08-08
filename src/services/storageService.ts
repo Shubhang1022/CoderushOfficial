@@ -106,7 +106,11 @@ export class StorageService {
         else pushedCount += sponsors.length;
       }
       if (statistics) {
-        const { error } = await supabase.from('community_statistics').upsert(statistics, { onConflict: 'id' });
+        const statsToPush = {
+          ...statistics,
+          id: '11111111-1111-1111-1111-111111111111',
+        };
+        const { error } = await supabase.from('community_statistics').upsert(statsToPush, { onConflict: 'id' });
         if (error) errors.push(`Statistics: ${error.message}`);
         else pushedCount += 1;
       }
@@ -234,15 +238,24 @@ export class StorageService {
     }
   }
 
-  // Statistics
   static getStatistics() {
-    return this.getItem(STORAGE_KEYS.STATISTICS, INITIAL_STATISTICS);
+    const stats = this.getItem(STORAGE_KEYS.STATISTICS, INITIAL_STATISTICS);
+    if (!stats || !stats.id || stats.id === '1') {
+      const fixedStats = { ...stats, id: '11111111-1111-1111-1111-111111111111' };
+      this.setItem(STORAGE_KEYS.STATISTICS, fixedStats);
+      return fixedStats;
+    }
+    return stats;
   }
   static async saveStatistics(stats: any) {
-    this.setItem(STORAGE_KEYS.STATISTICS, stats);
+    const formattedStats = {
+      ...stats,
+      id: '11111111-1111-1111-1111-111111111111',
+    };
+    this.setItem(STORAGE_KEYS.STATISTICS, formattedStats);
     if (supabase && isSupabaseConfigured) {
       try {
-        await supabase.from('community_statistics').upsert(stats, { onConflict: 'id' });
+        await supabase.from('community_statistics').upsert(formattedStats, { onConflict: 'id' });
       } catch (e) {
         console.warn('Supabase statistics sync warning:', e);
       }
