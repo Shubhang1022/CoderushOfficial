@@ -73,34 +73,46 @@ export class StorageService {
       const statistics = this.getStatistics();
 
       let pushedCount = 0;
+      const errors: string[] = [];
 
       if (events.length > 0) {
-        await supabase.from('events').upsert(events, { onConflict: 'id' });
-        pushedCount += events.length;
+        const { error } = await supabase.from('events').upsert(events, { onConflict: 'id' });
+        if (error) errors.push(`Events: ${error.message}`);
+        else pushedCount += events.length;
       }
       if (team.length > 0) {
-        await supabase.from('team_members').upsert(team, { onConflict: 'id' });
-        pushedCount += team.length;
+        const { error } = await supabase.from('team_members').upsert(team, { onConflict: 'id' });
+        if (error) errors.push(`Team: ${error.message}`);
+        else pushedCount += team.length;
       }
       if (albums.length > 0) {
-        await supabase.from('gallery_albums').upsert(albums, { onConflict: 'id' });
-        pushedCount += albums.length;
+        const { error } = await supabase.from('gallery_albums').upsert(albums, { onConflict: 'id' });
+        if (error) errors.push(`Albums: ${error.message}`);
+        else pushedCount += albums.length;
       }
       if (media.length > 0) {
-        await supabase.from('gallery_media').upsert(media, { onConflict: 'id' });
-        pushedCount += media.length;
+        const { error } = await supabase.from('gallery_media').upsert(media, { onConflict: 'id' });
+        if (error) errors.push(`Media: ${error.message}`);
+        else pushedCount += media.length;
       }
       if (announcements.length > 0) {
-        await supabase.from('announcements').upsert(announcements, { onConflict: 'id' });
-        pushedCount += announcements.length;
+        const { error } = await supabase.from('announcements').upsert(announcements, { onConflict: 'id' });
+        if (error) errors.push(`Announcements: ${error.message}`);
+        else pushedCount += announcements.length;
       }
       if (sponsors.length > 0) {
-        await supabase.from('sponsors').upsert(sponsors, { onConflict: 'id' });
-        pushedCount += sponsors.length;
+        const { error } = await supabase.from('sponsors').upsert(sponsors, { onConflict: 'id' });
+        if (error) errors.push(`Sponsors: ${error.message}`);
+        else pushedCount += sponsors.length;
       }
       if (statistics) {
-        await supabase.from('community_statistics').upsert(statistics, { onConflict: 'id' });
-        pushedCount += 1;
+        const { error } = await supabase.from('community_statistics').upsert(statistics, { onConflict: 'id' });
+        if (error) errors.push(`Statistics: ${error.message}`);
+        else pushedCount += 1;
+      }
+
+      if (errors.length > 0) {
+        return { success: false, count: pushedCount, error: errors.join(' | ') };
       }
 
       return { success: true, count: pushedCount };

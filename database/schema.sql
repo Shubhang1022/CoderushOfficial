@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.admins (
 
 -- Events Table
 CREATE TABLE IF NOT EXISTS public.events (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     short_description TEXT NOT NULL,
@@ -53,134 +53,9 @@ CREATE TABLE IF NOT EXISTS public.events (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Event Statistics Table
-CREATE TABLE IF NOT EXISTS public.event_statistics (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    participants INT DEFAULT 0,
-    volunteers INT DEFAULT 0,
-    organizers INT DEFAULT 0,
-    judges INT DEFAULT 0,
-    mentors INT DEFAULT 0,
-    projects INT DEFAULT 0,
-    teams INT DEFAULT 0,
-    colleges INT DEFAULT 0,
-    sponsors INT DEFAULT 0,
-    certificates INT DEFAULT 0,
-    hours INT DEFAULT 0,
-    prize_pool VARCHAR(100) DEFAULT '₹0',
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Gallery Table
-CREATE TABLE IF NOT EXISTS public.event_gallery (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    media_type VARCHAR(20) DEFAULT 'image', -- 'image' or 'video'
-    title VARCHAR(255),
-    caption TEXT,
-    file_url TEXT NOT NULL,
-    thumbnail TEXT,
-    display_order INT DEFAULT 0,
-    featured BOOLEAN DEFAULT FALSE,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Videos Table
-CREATE TABLE IF NOT EXISTS public.event_videos (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    title VARCHAR(255) NOT NULL,
-    youtube_link TEXT,
-    video_file TEXT,
-    thumbnail TEXT,
-    duration VARCHAR(50),
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Winners Table
-CREATE TABLE IF NOT EXISTS public.event_winners (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    position VARCHAR(100) NOT NULL, -- Winner, Runner Up, 2nd Runner Up, Special Mention
-    team_name VARCHAR(255) NOT NULL,
-    members TEXT,
-    college VARCHAR(255),
-    project VARCHAR(255),
-    photo TEXT,
-    description TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Sponsors Table
-CREATE TABLE IF NOT EXISTS public.event_sponsors (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    sponsor_name VARCHAR(255) NOT NULL,
-    logo TEXT NOT NULL,
-    website TEXT,
-    tier VARCHAR(100) DEFAULT 'Community Partner',
-    description TEXT,
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Timeline Table
-CREATE TABLE IF NOT EXISTS public.event_timeline (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    title VARCHAR(255) NOT NULL,
-    description TEXT,
-    event_time TIMESTAMPTZ NOT NULL,
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Schedule Table
-CREATE TABLE IF NOT EXISTS public.event_schedule (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    day VARCHAR(100) NOT NULL,
-    time VARCHAR(100) NOT NULL,
-    session_title VARCHAR(255) NOT NULL,
-    speaker VARCHAR(255),
-    venue VARCHAR(255),
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event FAQs Table
-CREATE TABLE IF NOT EXISTS public.event_faqs (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    question TEXT NOT NULL,
-    answer TEXT NOT NULL,
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Event Rules Table
-CREATE TABLE IF NOT EXISTS public.event_rules (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    event_id UUID REFERENCES public.events(id) ON DELETE CASCADE,
-    rule TEXT NOT NULL,
-    display_order INT DEFAULT 0,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
 -- Team Members Table
 CREATE TABLE IF NOT EXISTS public.team_members (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     role VARCHAR(255) NOT NULL,
     department VARCHAR(255),
@@ -200,7 +75,7 @@ CREATE TABLE IF NOT EXISTS public.team_members (
 
 -- Announcements Table
 CREATE TABLE IF NOT EXISTS public.announcements (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     description TEXT NOT NULL,
     badge VARCHAR(100) DEFAULT 'General',
@@ -217,12 +92,12 @@ CREATE TABLE IF NOT EXISTS public.announcements (
 
 -- Gallery Albums Table
 CREATE TABLE IF NOT EXISTS public.gallery_albums (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     slug VARCHAR(255) UNIQUE NOT NULL,
     cover_image TEXT NOT NULL,
     description TEXT,
-    event_id UUID REFERENCES public.events(id) ON DELETE SET NULL,
+    event_id VARCHAR(255),
     event_date TIMESTAMPTZ,
     display_order INT DEFAULT 0,
     published BOOLEAN DEFAULT TRUE,
@@ -232,9 +107,9 @@ CREATE TABLE IF NOT EXISTS public.gallery_albums (
 
 -- Gallery Media Table
 CREATE TABLE IF NOT EXISTS public.gallery_media (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    album_id UUID REFERENCES public.gallery_albums(id) ON DELETE CASCADE,
-    media_type VARCHAR(20) DEFAULT 'image', -- 'image' or 'video'
+    id VARCHAR(255) PRIMARY KEY,
+    album_id VARCHAR(255),
+    media_type VARCHAR(20) DEFAULT 'image',
     file_url TEXT NOT NULL,
     thumbnail TEXT,
     caption TEXT,
@@ -245,7 +120,7 @@ CREATE TABLE IF NOT EXISTS public.gallery_media (
 
 -- Community Statistics Table
 CREATE TABLE IF NOT EXISTS public.community_statistics (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     students_reached INT DEFAULT 2500,
     community_members INT DEFAULT 1200,
     events INT DEFAULT 18,
@@ -259,7 +134,7 @@ CREATE TABLE IF NOT EXISTS public.community_statistics (
 
 -- Community Settings Table
 CREATE TABLE IF NOT EXISTS public.community_settings (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    id VARCHAR(255) PRIMARY KEY,
     website_name VARCHAR(255) DEFAULT 'CodeRush',
     tagline VARCHAR(255) DEFAULT 'Official Technical Community of BBDNIIT',
     about TEXT,
