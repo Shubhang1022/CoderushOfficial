@@ -137,7 +137,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-text-muted">
           <p>© {new Date().getFullYear()} CodeRush BBDNIIT. All Rights Reserved.</p>
           <p className="flex items-center gap-1">
-            Official Technical Community of BBDNIIT
+            Official Coding Club of BBDNIIT
           </p>
         </div>
       </div>
