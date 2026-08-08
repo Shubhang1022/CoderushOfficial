@@ -86,7 +86,11 @@ export class StorageService {
         else pushedCount += team.length;
       }
       if (albums.length > 0) {
-        const { error } = await supabase.from('gallery_albums').upsert(albums, { onConflict: 'id' });
+        const formattedAlbums = albums.map((a: any) => ({
+          ...a,
+          media_count: typeof a.media_count === 'number' ? a.media_count : 0,
+        }));
+        const { error } = await supabase.from('gallery_albums').upsert(formattedAlbums, { onConflict: 'id' });
         if (error) errors.push(`Albums: ${error.message}`);
         else pushedCount += albums.length;
       }

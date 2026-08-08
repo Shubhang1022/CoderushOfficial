@@ -101,6 +101,7 @@ CREATE TABLE IF NOT EXISTS public.gallery_albums (
     event_date TIMESTAMPTZ,
     display_order INT DEFAULT 0,
     published BOOLEAN DEFAULT TRUE,
+    media_count INT DEFAULT 0,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -117,6 +118,43 @@ CREATE TABLE IF NOT EXISTS public.gallery_media (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Schema Migration Fixes for existing Supabase projects (Drop old foreign keys first)
+ALTER TABLE IF EXISTS public.event_statistics DROP CONSTRAINT IF EXISTS event_statistics_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_gallery DROP CONSTRAINT IF EXISTS event_gallery_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_videos DROP CONSTRAINT IF EXISTS event_videos_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_winners DROP CONSTRAINT IF EXISTS event_winners_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_sponsors DROP CONSTRAINT IF EXISTS event_sponsors_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_timeline DROP CONSTRAINT IF EXISTS event_timeline_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_schedule DROP CONSTRAINT IF EXISTS event_schedule_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_faqs DROP CONSTRAINT IF EXISTS event_faqs_event_id_fkey;
+ALTER TABLE IF EXISTS public.event_rules DROP CONSTRAINT IF EXISTS event_rules_event_id_fkey;
+ALTER TABLE IF EXISTS public.gallery_albums DROP CONSTRAINT IF EXISTS gallery_albums_event_id_fkey;
+ALTER TABLE IF EXISTS public.gallery_media DROP CONSTRAINT IF EXISTS gallery_media_album_id_fkey;
+ALTER TABLE IF EXISTS public.activity_logs DROP CONSTRAINT IF EXISTS activity_logs_admin_id_fkey;
+
+-- Alter column types to VARCHAR(255) across all existing tables
+ALTER TABLE IF EXISTS public.events ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.team_members ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.announcements ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.gallery_albums ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.gallery_albums ADD COLUMN IF NOT EXISTS media_count INT DEFAULT 0;
+ALTER TABLE IF EXISTS public.gallery_albums ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.gallery_media ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.gallery_media ALTER COLUMN album_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.community_statistics ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.community_settings ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.sponsors ALTER COLUMN id TYPE VARCHAR(255);
+
+ALTER TABLE IF EXISTS public.event_statistics ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_gallery ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_videos ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_winners ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_sponsors ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_timeline ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_schedule ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_faqs ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.event_rules ALTER COLUMN id TYPE VARCHAR(255), ALTER COLUMN event_id TYPE VARCHAR(255);
 
 -- Community Statistics Table
 CREATE TABLE IF NOT EXISTS public.community_statistics (
