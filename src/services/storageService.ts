@@ -89,7 +89,11 @@ export class StorageService {
         else pushedCount += events.length;
       }
       if (team.length > 0) {
-        const { error } = await supabase.from('team_members').upsert(team, { onConflict: 'id' });
+        const formattedTeam = team.map((m: any) => ({
+          ...m,
+          is_top_leader: Boolean(m.is_top_leader),
+        }));
+        const { error } = await supabase.from('team_members').upsert(formattedTeam, { onConflict: 'id' });
         if (error) errors.push(`Team: ${error.message}`);
         else pushedCount += team.length;
       }

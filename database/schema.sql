@@ -136,6 +136,7 @@ ALTER TABLE IF EXISTS public.activity_logs DROP CONSTRAINT IF EXISTS activity_lo
 -- Alter column types to VARCHAR(255) across all existing tables
 ALTER TABLE IF EXISTS public.events ALTER COLUMN id TYPE VARCHAR(255);
 ALTER TABLE IF EXISTS public.team_members ALTER COLUMN id TYPE VARCHAR(255);
+ALTER TABLE IF EXISTS public.team_members ADD COLUMN IF NOT EXISTS is_top_leader BOOLEAN DEFAULT FALSE;
 ALTER TABLE IF EXISTS public.announcements ALTER COLUMN id TYPE VARCHAR(255);
 ALTER TABLE IF EXISTS public.gallery_albums ALTER COLUMN id TYPE VARCHAR(255);
 ALTER TABLE IF EXISTS public.gallery_albums ADD COLUMN IF NOT EXISTS media_count INT DEFAULT 0;
