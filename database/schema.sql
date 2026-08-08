@@ -169,7 +169,7 @@ CREATE TABLE IF NOT EXISTS public.contact_messages (
 );
 
 -- Activity Logs Table
-CREATE TABLE IF NOT EXISTS public.activity_logs (
+CREATE TABLE IF NOT EXISTS  public.activity_logs (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
     action VARCHAR(255) NOT NULL,
     details TEXT,

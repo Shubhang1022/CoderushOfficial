@@ -31,14 +31,14 @@ export const INITIAL_SETTINGS: CommunitySettings = {
 
 export const INITIAL_STATISTICS: CommunityStatistics = {
   id: '1',
-  students_reached: 2800,
-  community_members: 1450,
-  events: 22,
-  hackathons: 6,
-  workshops: 14,
-  organizers: 42,
-  projects: 98,
-  sponsors: 18,
+  students_reached: 700,
+  community_members: 10,
+  events: 2,
+  hackathons: 1,
+  workshops: 1,
+  organizers: 10,
+  projects: 5,
+  sponsors: 2,
 };
 
 export const INITIAL_EVENTS: Event[] = [];
