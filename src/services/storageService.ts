@@ -129,15 +129,7 @@ export class StorageService {
     if (!supabase || !isSupabaseConfigured) return;
 
     try {
-      const [
-        { data: events },
-        { data: team },
-        { data: albums },
-        { data: media },
-        { data: announcements },
-        { data: sponsors },
-        { data: statistics },
-      ] = await Promise.all([
+      const results = await Promise.allSettled([
         supabase.from('events').select('*'),
         supabase.from('team_members').select('*'),
         supabase.from('gallery_albums').select('*'),
@@ -147,12 +139,20 @@ export class StorageService {
         supabase.from('community_statistics').select('*'),
       ]);
 
-      if (events && events.length > 0) this.setItem(STORAGE_KEYS.EVENTS, events);
-      if (team && team.length > 0) this.setItem(STORAGE_KEYS.TEAM, team);
-      if (albums && albums.length > 0) this.setItem(STORAGE_KEYS.ALBUMS, albums);
-      if (media && media.length > 0) this.setItem(STORAGE_KEYS.GALLERY_MEDIA, media);
-      if (announcements && announcements.length > 0) this.setItem(STORAGE_KEYS.ANNOUNCEMENTS, announcements);
-      if (sponsors && sponsors.length > 0) this.setItem(STORAGE_KEYS.SPONSORS, sponsors);
+      const events = results[0].status === 'fulfilled' ? results[0].value.data : null;
+      const team = results[1].status === 'fulfilled' ? results[1].value.data : null;
+      const albums = results[2].status === 'fulfilled' ? results[2].value.data : null;
+      const media = results[3].status === 'fulfilled' ? results[3].value.data : null;
+      const announcements = results[4].status === 'fulfilled' ? results[4].value.data : null;
+      const sponsors = results[5].status === 'fulfilled' ? results[5].value.data : null;
+      const statistics = results[6].status === 'fulfilled' ? results[6].value.data : null;
+
+      if (events && events.length >= 0) this.setItem(STORAGE_KEYS.EVENTS, events);
+      if (team && team.length >= 0) this.setItem(STORAGE_KEYS.TEAM, team);
+      if (albums && albums.length >= 0) this.setItem(STORAGE_KEYS.ALBUMS, albums);
+      if (media && media.length >= 0) this.setItem(STORAGE_KEYS.GALLERY_MEDIA, media);
+      if (announcements && announcements.length >= 0) this.setItem(STORAGE_KEYS.ANNOUNCEMENTS, announcements);
+      if (sponsors && sponsors.length >= 0) this.setItem(STORAGE_KEYS.SPONSORS, sponsors);
       if (statistics && statistics.length > 0) this.setItem(STORAGE_KEYS.STATISTICS, statistics[0]);
     } catch (err) {
       console.warn('Supabase DB auto-sync error:', err);

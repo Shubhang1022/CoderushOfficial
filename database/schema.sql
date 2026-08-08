@@ -178,6 +178,19 @@ CREATE TABLE IF NOT EXISTS public.activity_logs (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
+-- Sponsors Table
+CREATE TABLE IF NOT EXISTS public.sponsors (
+    id VARCHAR(255) PRIMARY KEY,
+    sponsor_name VARCHAR(255) NOT NULL,
+    logo TEXT NOT NULL,
+    website TEXT,
+    tier VARCHAR(100) DEFAULT 'Community Partner',
+    description TEXT,
+    display_order INT DEFAULT 0,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
 -- Enable RLS
 ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.team_members ENABLE ROW LEVEL SECURITY;
@@ -187,6 +200,7 @@ ALTER TABLE public.gallery_media ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.community_statistics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.community_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.sponsors ENABLE ROW LEVEL SECURITY;
 
 -- Public read and write access policies for Supabase Cloud DB sync
 DROP POLICY IF EXISTS "Public Read Events" ON public.events;
@@ -196,6 +210,7 @@ DROP POLICY IF EXISTS "Public Read Albums" ON public.gallery_albums;
 DROP POLICY IF EXISTS "Public Read Gallery Media" ON public.gallery_media;
 DROP POLICY IF EXISTS "Public Read Stats" ON public.community_statistics;
 DROP POLICY IF EXISTS "Public Read Settings" ON public.community_settings;
+DROP POLICY IF EXISTS "Public Read Sponsors" ON public.sponsors;
 DROP POLICY IF EXISTS "Public Insert Messages" ON public.contact_messages;
 
 CREATE POLICY "Public Read Events" ON public.events FOR ALL USING (true) WITH CHECK (true);
@@ -205,6 +220,7 @@ CREATE POLICY "Public Read Albums" ON public.gallery_albums FOR ALL USING (true)
 CREATE POLICY "Public Read Gallery Media" ON public.gallery_media FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Read Stats" ON public.community_statistics FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Read Settings" ON public.community_settings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Sponsors" ON public.sponsors FOR ALL USING (true) WITH CHECK (true);
 CREATE POLICY "Public Insert Messages" ON public.contact_messages FOR ALL USING (true) WITH CHECK (true);
 
 -- Supabase Storage Bucket & RLS Policies for 'coderush-media'
