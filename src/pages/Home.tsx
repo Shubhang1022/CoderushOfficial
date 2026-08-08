@@ -246,19 +246,18 @@ export const Home: React.FC = () => {
           <h2 className="text-3xl font-heading font-bold text-white">Engineering Growth in Numbers</h2>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 flex justify-center items-center pl-44">
-          <div className="p-6 rounded-2xl card-dark text-center space-y-2">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+          <div className="p-6 rounded-2xl card-dark text-center space-y-2 border border-white/10 hover:border-brand-blue/30 transition-all">
             <Users className="w-6 h-6 text-brand-blue mx-auto" />
             <div className="text-3xl font-heading font-extrabold text-white">{stats.students_reached.toLocaleString()}+</div>
             <div className="text-xs text-text-muted uppercase tracking-wider font-medium">Students Reached</div>
           </div>
-          <div className="p-6 rounded-2xl card-dark text-center space-y-2">
+          <div className="p-6 rounded-2xl card-dark text-center space-y-2 border border-white/10 hover:border-brand-cyan/30 transition-all">
             <Calendar className="w-6 h-6 text-brand-cyan mx-auto" />
             <div className="text-3xl font-heading font-extrabold text-white">{stats.events}+</div>
             <div className="text-xs text-text-muted uppercase tracking-wider font-medium">Events Conducted</div>
           </div>
-         
-          <div className="p-6 rounded-2xl card-dark text-center space-y-2 col-span-2 md:col-span-1">
+          <div className="p-6 rounded-2xl card-dark text-center space-y-2 border border-white/10 hover:border-brand-purple/30 transition-all">
             <Users className="w-6 h-6 text-brand-purple mx-auto" />
             <div className="text-3xl font-heading font-extrabold text-white">{stats.community_members}+</div>
             <div className="text-xs text-text-muted uppercase tracking-wider font-medium">Community Members</div>

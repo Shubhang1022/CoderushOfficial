@@ -28,7 +28,13 @@ import { AdminMessages } from './pages/admin/AdminMessages';
 import { AdminAnalytics } from './pages/admin/AdminAnalytics';
 import { AdminActivityLogs } from './pages/admin/AdminActivityLogs';
 
+import { StorageService } from './services/storageService';
+
 export const App: React.FC = () => {
+  React.useEffect(() => {
+    StorageService.syncFromSupabase();
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>

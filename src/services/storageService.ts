@@ -10,6 +10,7 @@ import {
   INITIAL_MESSAGES,
   INITIAL_ACTIVITY_LOGS,
 } from '../constants/mockData';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
 const STORAGE_KEYS = {
   EVENTS: 'coderush_events_v1',
@@ -51,68 +52,161 @@ export class StorageService {
     }
   }
 
+  /**
+   * Fetches latest live data from Supabase Cloud DB and populates local storage on all devices.
+   */
+  static async syncFromSupabase(): Promise<void> {
+    if (!supabase || !isSupabaseConfigured) return;
+
+    try {
+      const [
+        { data: events },
+        { data: team },
+        { data: albums },
+        { data: media },
+        { data: announcements },
+        { data: sponsors },
+        { data: statistics },
+      ] = await Promise.all([
+        supabase.from('events').select('*'),
+        supabase.from('team_members').select('*'),
+        supabase.from('gallery_albums').select('*'),
+        supabase.from('gallery_media').select('*'),
+        supabase.from('announcements').select('*'),
+        supabase.from('sponsors').select('*'),
+        supabase.from('community_statistics').select('*'),
+      ]);
+
+      if (events && events.length > 0) this.setItem(STORAGE_KEYS.EVENTS, events);
+      if (team && team.length > 0) this.setItem(STORAGE_KEYS.TEAM, team);
+      if (albums && albums.length > 0) this.setItem(STORAGE_KEYS.ALBUMS, albums);
+      if (media && media.length > 0) this.setItem(STORAGE_KEYS.GALLERY_MEDIA, media);
+      if (announcements && announcements.length > 0) this.setItem(STORAGE_KEYS.ANNOUNCEMENTS, announcements);
+      if (sponsors && sponsors.length > 0) this.setItem(STORAGE_KEYS.SPONSORS, sponsors);
+      if (statistics && statistics.length > 0) this.setItem(STORAGE_KEYS.STATISTICS, statistics[0]);
+    } catch (err) {
+      console.warn('Supabase DB auto-sync error:', err);
+    }
+  }
+
   // Events
   static getEvents() {
     return this.getItem(STORAGE_KEYS.EVENTS, INITIAL_EVENTS);
   }
-  static saveEvents(events: any[]) {
+  static async saveEvents(events: any[]) {
     this.setItem(STORAGE_KEYS.EVENTS, events);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('events').upsert(events, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase events sync warning:', e);
+      }
+    }
   }
 
   // Team
   static getTeam() {
     return this.getItem(STORAGE_KEYS.TEAM, INITIAL_TEAM);
   }
-  static saveTeam(team: any[]) {
+  static async saveTeam(team: any[]) {
     this.setItem(STORAGE_KEYS.TEAM, team);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('team_members').upsert(team, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase team sync warning:', e);
+      }
+    }
   }
 
   // Announcements
   static getAnnouncements() {
     return this.getItem(STORAGE_KEYS.ANNOUNCEMENTS, INITIAL_ANNOUNCEMENTS);
   }
-  static saveAnnouncements(items: any[]) {
+  static async saveAnnouncements(items: any[]) {
     this.setItem(STORAGE_KEYS.ANNOUNCEMENTS, items);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('announcements').upsert(items, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase announcements sync warning:', e);
+      }
+    }
   }
 
   // Albums
   static getAlbums() {
     return this.getItem(STORAGE_KEYS.ALBUMS, INITIAL_ALBUMS);
   }
-  static saveAlbums(albums: any[]) {
+  static async saveAlbums(albums: any[]) {
     this.setItem(STORAGE_KEYS.ALBUMS, albums);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('gallery_albums').upsert(albums, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase albums sync warning:', e);
+      }
+    }
   }
 
   // Gallery Media
   static getGalleryMedia() {
     return this.getItem(STORAGE_KEYS.GALLERY_MEDIA, INITIAL_GALLERY_MEDIA);
   }
-  static saveGalleryMedia(media: any[]) {
+  static async saveGalleryMedia(media: any[]) {
     this.setItem(STORAGE_KEYS.GALLERY_MEDIA, media);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('gallery_media').upsert(media, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase gallery media sync warning:', e);
+      }
+    }
   }
 
   // Statistics
   static getStatistics() {
     return this.getItem(STORAGE_KEYS.STATISTICS, INITIAL_STATISTICS);
   }
-  static saveStatistics(stats: any) {
+  static async saveStatistics(stats: any) {
     this.setItem(STORAGE_KEYS.STATISTICS, stats);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('community_statistics').upsert(stats, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase statistics sync warning:', e);
+      }
+    }
   }
 
   // Settings
   static getSettings() {
     return this.getItem(STORAGE_KEYS.SETTINGS, INITIAL_SETTINGS);
   }
-  static saveSettings(settings: any) {
+  static async saveSettings(settings: any) {
     this.setItem(STORAGE_KEYS.SETTINGS, settings);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('community_settings').upsert(settings, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase settings sync warning:', e);
+      }
+    }
   }
 
   // Sponsors
   static getSponsors() {
     return this.getItem(STORAGE_KEYS.SPONSORS, INITIAL_SPONSORS);
   }
-  static saveSponsors(sponsors: any[]) {
+  static async saveSponsors(sponsors: any[]) {
     this.setItem(STORAGE_KEYS.SPONSORS, sponsors);
+    if (supabase && isSupabaseConfigured) {
+      try {
+        await supabase.from('sponsors').upsert(sponsors, { onConflict: 'id' });
+      } catch (e) {
+        console.warn('Supabase sponsors sync warning:', e);
+      }
+    }
   }
 
   // Contact Messages
