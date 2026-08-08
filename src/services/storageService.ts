@@ -76,7 +76,15 @@ export class StorageService {
       const errors: string[] = [];
 
       if (events.length > 0) {
-        const { error } = await supabase.from('events').upsert(events, { onConflict: 'id' });
+        let { error } = await supabase.from('events').upsert(events, { onConflict: 'id' });
+        if (error && error.message.includes('unique constraint')) {
+          const deduplicatedEvents = events.map((e: any, idx: number) => ({
+            ...e,
+            slug: `${e.slug}-${Date.now().toString().slice(-4)}${idx}`
+          }));
+          const retry = await supabase.from('events').upsert(deduplicatedEvents, { onConflict: 'id' });
+          error = retry.error;
+        }
         if (error) errors.push(`Events: ${error.message}`);
         else pushedCount += events.length;
       }
@@ -90,7 +98,15 @@ export class StorageService {
           ...a,
           media_count: typeof a.media_count === 'number' ? a.media_count : 0,
         }));
-        const { error } = await supabase.from('gallery_albums').upsert(formattedAlbums, { onConflict: 'id' });
+        let { error } = await supabase.from('gallery_albums').upsert(formattedAlbums, { onConflict: 'id' });
+        if (error && error.message.includes('unique constraint')) {
+          const deduplicatedAlbums = formattedAlbums.map((a: any, idx: number) => ({
+            ...a,
+            slug: `${a.slug}-${Date.now().toString().slice(-4)}${idx}`
+          }));
+          const retry = await supabase.from('gallery_albums').upsert(deduplicatedAlbums, { onConflict: 'id' });
+          error = retry.error;
+        }
         if (error) errors.push(`Albums: ${error.message}`);
         else pushedCount += albums.length;
       }
