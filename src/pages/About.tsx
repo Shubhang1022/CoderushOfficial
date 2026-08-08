@@ -14,7 +14,7 @@ export const About: React.FC = () => {
           ABOUT CODERUSH
         </div>
         <h1 className="text-4xl sm:text-5xl font-heading font-extrabold text-white">
-          Official Technical Community of BBDNIIT
+          Official Coding Club of BBDNIIT
         </h1>
         <p className="text-text-secondary text-sm md:text-base leading-relaxed">
           Established to represent engineering innovation at Babu Banarasi Das Northern India Institute of Technology, Lucknow.

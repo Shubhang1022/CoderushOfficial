@@ -68,7 +68,7 @@ export const Home: React.FC = () => {
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-500/10 border border-rose-500/30 text-xs font-semibold text-rose-300 shadow-glow-red backdrop-blur-md">
                 <Sparkles className="w-3.5 h-3.5 text-rose-400" />
-                <span>OFFICIAL TECHNICAL COMMUNITY OF BBDNIIT</span>
+                <span>OFFICIAL CODING CLUB OF BBDNIIT</span>
               </div>
 
               <h1 className="text-5xl sm:text-6xl md:text-7xl font-heading font-extrabold text-white tracking-tight leading-[1.05]">
