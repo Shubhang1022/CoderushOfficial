@@ -1,0 +1,18 @@
+name: Supabase Keep-Alive Ping
+
+on:
+  schedule:
+    # Runs every 3 days at 00:00 UTC to prevent Supabase inactivity auto-pause
+    - cron: '0 0 */3 * *'
+  workflow_dispatch:
+
+jobs:
+  ping-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send API Ping to Supabase
+        run: |
+          curl -s -X GET "https://xhhpxwsozvhvkgzxoazb.supabase.co/rest/v1/community_settings?select=id" \
+            -H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoaHB4d3NvenZodmtnenhvYXpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMjQxNzIsImV4cCI6MjEwMTYwMDE3Mn0.-XOpu0zMcIpGboVtxVCniGjPFkCMbY7q8MjBkbPGpZk" \
+            -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhoaHB4d3NvenZodmtnenhvYXpiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYwMjQxNzIsImV4cCI6MjEwMTYwMDE3Mn0.-XOpu0zMcIpGboVtxVCniGjPFkCMbY7q8MjBkbPGpZk"
+          echo "Supabase Keep-Alive Ping Successful!"

@@ -53,6 +53,61 @@ export class StorageService {
   }
 
   /**
+   * Pushes all current local admin data to Supabase Cloud DB tables.
+   */
+  static async pushAllToSupabase(): Promise<{ success: boolean; count: number; error?: string }> {
+    if (!supabase || !isSupabaseConfigured) {
+      return { success: false, count: 0, error: 'Supabase is not configured' };
+    }
+
+    try {
+      const events = this.getEvents();
+      const team = this.getTeam();
+      const albums = this.getAlbums();
+      const media = this.getGalleryMedia();
+      const announcements = this.getAnnouncements();
+      const sponsors = this.getSponsors();
+      const statistics = this.getStatistics();
+
+      let pushedCount = 0;
+
+      if (events.length > 0) {
+        await supabase.from('events').upsert(events, { onConflict: 'id' });
+        pushedCount += events.length;
+      }
+      if (team.length > 0) {
+        await supabase.from('team_members').upsert(team, { onConflict: 'id' });
+        pushedCount += team.length;
+      }
+      if (albums.length > 0) {
+        await supabase.from('gallery_albums').upsert(albums, { onConflict: 'id' });
+        pushedCount += albums.length;
+      }
+      if (media.length > 0) {
+        await supabase.from('gallery_media').upsert(media, { onConflict: 'id' });
+        pushedCount += media.length;
+      }
+      if (announcements.length > 0) {
+        await supabase.from('announcements').upsert(announcements, { onConflict: 'id' });
+        pushedCount += announcements.length;
+      }
+      if (sponsors.length > 0) {
+        await supabase.from('sponsors').upsert(sponsors, { onConflict: 'id' });
+        pushedCount += sponsors.length;
+      }
+      if (statistics) {
+        await supabase.from('community_statistics').upsert(statistics, { onConflict: 'id' });
+        pushedCount += 1;
+      }
+
+      return { success: true, count: pushedCount };
+    } catch (err: any) {
+      console.error('Error pushing data to Supabase DB:', err);
+      return { success: false, count: 0, error: err?.message || 'Push failed' };
+    }
+  }
+
+  /**
    * Fetches latest live data from Supabase Cloud DB and populates local storage on all devices.
    */
   static async syncFromSupabase(): Promise<void> {

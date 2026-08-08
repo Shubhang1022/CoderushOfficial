@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Calendar,
@@ -22,6 +22,7 @@ import { CountdownTimer } from '../../components/ui/CountdownTimer';
 
 export const AdminDashboard: React.FC = () => {
   const navigate = useNavigate();
+  const [syncingCloud, setSyncingCloud] = useState(false);
 
   const events = EventService.getAllEvents();
   const team = TeamService.getTeam();
@@ -34,6 +35,17 @@ export const AdminDashboard: React.FC = () => {
   const upcomingEvents = events.filter((e) => ['coming_soon', 'registration_opening', 'registration_open', 'live'].includes(e.status));
   const nextEvent = upcomingEvents[0];
 
+  const handleSyncCloud = async () => {
+    setSyncingCloud(true);
+    const res = await StorageService.pushAllToSupabase();
+    setSyncingCloud(false);
+    if (res.success) {
+      alert(`Success! Pushed ${res.count} records to Supabase Cloud DB. Mobile phones & all visitor devices will now see your live data!`);
+    } else {
+      alert(`Cloud Sync Note: ${res.error}. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in Vercel Environment Variables.`);
+    }
+  };
+
   return (
     <div className="space-y-8">
       {/* Header */}
@@ -44,6 +56,16 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={handleSyncCloud}
+            disabled={syncingCloud}
+            className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 hover:bg-emerald-500/30 transition-all disabled:opacity-50"
+            title="Push local admin data to Supabase Cloud DB so phones and all devices see live data"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-400" />
+            {syncingCloud ? 'Syncing to Cloud...' : 'Sync Data to Cloud DB'}
+          </button>
+
           <button
             onClick={() => navigate('/admin/events')}
             className="flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold bg-brand-blue text-white shadow-glow-blue hover:bg-brand-glow transition-all"
