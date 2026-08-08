@@ -34,14 +34,20 @@ export const AdminMessages: React.FC = () => {
     setReplyText('');
   };
 
-  const handleSaveReply = (msg: ContactMessage, sendViaMailApp: boolean = false) => {
+  const handleSaveReply = (msg: ContactMessage, sendMode: 'none' | 'gmail' | 'mailto' = 'none') => {
     if (!replyText.trim()) return;
 
     ContactService.replyToMessage(msg.id, replyText.trim());
 
-    if (sendViaMailApp) {
-      const subject = encodeURIComponent(`Re: ${msg.subject}`);
-      const body = encodeURIComponent(replyText.trim());
+    const subject = encodeURIComponent(`Re: ${msg.subject}`);
+    const body = encodeURIComponent(replyText.trim());
+
+    if (sendMode === 'gmail') {
+      window.open(
+        `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(msg.email)}&su=${subject}&body=${body}`,
+        '_blank'
+      );
+    } else if (sendMode === 'mailto') {
       window.open(`mailto:${msg.email}?subject=${subject}&body=${body}`, '_blank');
     }
 
@@ -194,14 +200,27 @@ export const AdminMessages: React.FC = () => {
                     </div>
 
                     <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
-                      <button
-                        type="button"
-                        onClick={() => handleSaveReply(msg, true)}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 hover:bg-brand-cyan/30 transition-all"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                        Send via Email App & Save
-                      </button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleSaveReply(msg, 'gmail')}
+                          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 transition-all"
+                          title="Open Gmail web compose pre-filled for recipient"
+                        >
+                          <Send className="w-3.5 h-3.5 text-rose-400" />
+                          Send via Gmail (coderush.bbdniit@gmail.com)
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleSaveReply(msg, 'mailto')}
+                          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-brand-cyan/20 text-brand-cyan border border-brand-cyan/30 hover:bg-brand-cyan/30 transition-all"
+                          title="Open default email app"
+                        >
+                          <ExternalLink className="w-3.5 h-3.5" />
+                          Mail App
+                        </button>
+                      </div>
 
                       <div className="flex items-center gap-2">
                         <button
@@ -213,7 +232,7 @@ export const AdminMessages: React.FC = () => {
                         </button>
                         <button
                           type="button"
-                          onClick={() => handleSaveReply(msg, false)}
+                          onClick={() => handleSaveReply(msg, 'none')}
                           className="flex items-center gap-1.5 px-5 py-2 rounded-xl text-xs font-semibold bg-brand-blue text-white shadow-glow-blue hover:bg-brand-glow transition-all"
                         >
                           <CheckCircle2 className="w-3.5 h-3.5" />
