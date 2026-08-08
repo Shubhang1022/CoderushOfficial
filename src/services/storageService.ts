@@ -44,6 +44,9 @@ export class StorageService {
   private static setItem<T>(key: string, value: T): void {
     try {
       localStorage.setItem(key, JSON.stringify(value));
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('coderush_storage_sync', { detail: { key } }));
+      }
     } catch (e: any) {
       console.error(`Error writing ${key} to localStorage:`, e);
       if (e?.name === 'QuotaExceededError' || e?.code === 22) {

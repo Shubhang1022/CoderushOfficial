@@ -6,6 +6,14 @@ import { GalleryMedia } from '../types';
 
 export const Gallery: React.FC = () => {
   const navigate = useNavigate();
+  const [, setSyncTick] = useState(0);
+
+  React.useEffect(() => {
+    const handleSync = () => setSyncTick((prev) => prev + 1);
+    window.addEventListener('coderush_storage_sync', handleSync);
+    return () => window.removeEventListener('coderush_storage_sync', handleSync);
+  }, []);
+
   const albums = GalleryService.getPublicAlbums();
   const allMedia = GalleryService.getAllPublicMedia();
   const [activeTab, setActiveTab] = useState<'albums' | 'all'>('albums');

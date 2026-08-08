@@ -4,6 +4,14 @@ import { EventService } from '../services/eventService';
 import { EventCard } from '../components/ui/EventCard';
 
 export const Events: React.FC = () => {
+  const [, setSyncTick] = useState(0);
+
+  React.useEffect(() => {
+    const handleSync = () => setSyncTick((prev) => prev + 1);
+    window.addEventListener('coderush_storage_sync', handleSync);
+    return () => window.removeEventListener('coderush_storage_sync', handleSync);
+  }, []);
+
   const publicEvents = EventService.getPublicEvents();
   const [activeCategory, setActiveCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');

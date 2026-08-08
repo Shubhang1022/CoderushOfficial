@@ -24,6 +24,14 @@ import coderushAssetImage from '../assets/IMG_20260413_165317.jpg';
 
 export const Home: React.FC = () => {
   const navigate = useNavigate();
+  const [, setSyncTick] = useState(0);
+
+  React.useEffect(() => {
+    const handleSync = () => setSyncTick((prev) => prev + 1);
+    window.addEventListener('coderush_storage_sync', handleSync);
+    return () => window.removeEventListener('coderush_storage_sync', handleSync);
+  }, []);
+
   const settings = SettingsService.getSettings();
   const stats = SettingsService.getStatistics();
   const featuredEvent = EventService.getFeaturedEvent();

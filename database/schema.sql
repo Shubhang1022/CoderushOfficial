@@ -313,15 +313,24 @@ ALTER TABLE public.community_statistics ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.community_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
 
--- Public read access policies
-CREATE POLICY "Public Read Events" ON public.events FOR SELECT USING (true);
-CREATE POLICY "Public Read Team" ON public.team_members FOR SELECT USING (is_active = true);
-CREATE POLICY "Public Read Announcements" ON public.announcements FOR SELECT USING (published = true);
-CREATE POLICY "Public Read Albums" ON public.gallery_albums FOR SELECT USING (published = true);
-CREATE POLICY "Public Read Gallery Media" ON public.gallery_media FOR SELECT USING (true);
-CREATE POLICY "Public Read Stats" ON public.community_statistics FOR SELECT USING (true);
-CREATE POLICY "Public Read Settings" ON public.community_settings FOR SELECT USING (true);
-CREATE POLICY "Public Insert Messages" ON public.contact_messages FOR INSERT WITH CHECK (true);
+-- Public read and write access policies for Supabase Cloud DB sync
+DROP POLICY IF EXISTS "Public Read Events" ON public.events;
+DROP POLICY IF EXISTS "Public Read Team" ON public.team_members;
+DROP POLICY IF EXISTS "Public Read Announcements" ON public.announcements;
+DROP POLICY IF EXISTS "Public Read Albums" ON public.gallery_albums;
+DROP POLICY IF EXISTS "Public Read Gallery Media" ON public.gallery_media;
+DROP POLICY IF EXISTS "Public Read Stats" ON public.community_statistics;
+DROP POLICY IF EXISTS "Public Read Settings" ON public.community_settings;
+DROP POLICY IF EXISTS "Public Insert Messages" ON public.contact_messages;
+
+CREATE POLICY "Public Read Events" ON public.events FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Team" ON public.team_members FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Announcements" ON public.announcements FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Albums" ON public.gallery_albums FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Gallery Media" ON public.gallery_media FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Stats" ON public.community_statistics FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Read Settings" ON public.community_settings FOR ALL USING (true) WITH CHECK (true);
+CREATE POLICY "Public Insert Messages" ON public.contact_messages FOR ALL USING (true) WITH CHECK (true);
 
 -- Supabase Storage Bucket & RLS Policies for 'coderush-media'
 INSERT INTO storage.buckets (id, name, public)

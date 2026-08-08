@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Users, Linkedin, Github, Mail, Crown, ShieldCheck } from 'lucide-react';
 import { TeamService } from '../services/teamService';
 
 export const Team: React.FC = () => {
+  const [, setSyncTick] = useState(0);
+
+  React.useEffect(() => {
+    const handleSync = () => setSyncTick((prev) => prev + 1);
+    window.addEventListener('coderush_storage_sync', handleSync);
+    return () => window.removeEventListener('coderush_storage_sync', handleSync);
+  }, []);
+
   const team = TeamService.getActiveTeam();
 
   // 1. Top 2 Leaders
