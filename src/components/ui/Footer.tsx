@@ -58,28 +58,7 @@ export const Footer: React.FC = () => {
                   <Linkedin className="w-4 h-4" />
                 </a>
               )}
-              {settings.github && (
-                <a
-                  href={settings.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:border-brand-blue hover:bg-brand-blue/10 transition-all"
-                  aria-label="GitHub"
-                >
-                  <Github className="w-4 h-4" />
-                </a>
-              )}
-              {settings.youtube && (
-                <a
-                  href={settings.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-text-secondary hover:text-white hover:border-brand-blue hover:bg-brand-blue/10 transition-all"
-                  aria-label="YouTube"
-                >
-                  <Youtube className="w-4 h-4" />
-                </a>
-              )}
+             
             </div>
           </div>
 
@@ -90,25 +69,25 @@ export const Footer: React.FC = () => {
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <Link to="/" className="text-text-secondary hover:text-brand-cyan transition-colors">Home</Link>
+                <Link to="/" className="text-text-secondary hover:text-brand-cyan transition-colors">HOME</Link>
               </li>
               <li>
-                <Link to="/about" className="text-text-secondary hover:text-brand-cyan transition-colors">About CodeRush</Link>
+                <Link to="/about" className="text-text-secondary hover:text-brand-cyan transition-colors">ABOUT</Link>
               </li>
               <li>
-                <Link to="/events" className="text-text-secondary hover:text-brand-cyan transition-colors">Technical Events</Link>
+                <Link to="/events" className="text-text-secondary hover:text-brand-cyan transition-colors">EVENTS</Link>
               </li>
               <li>
-                <Link to="/gallery" className="text-text-secondary hover:text-brand-cyan transition-colors">Media Gallery</Link>
+                <Link to="/gallery" className="text-text-secondary hover:text-brand-cyan transition-colors">GALLERY</Link>
               </li>
               <li>
-                <Link to="/team" className="text-text-secondary hover:text-brand-cyan transition-colors">Organizing Team</Link>
+                <Link to="/team" className="text-text-secondary hover:text-brand-cyan transition-colors">TEAM</Link>
               </li>
               <li>
-                <Link to="/updates" className="text-text-secondary hover:text-brand-cyan transition-colors">Community Updates</Link>
+                <Link to="/updates" className="text-text-secondary hover:text-brand-cyan transition-colors">UPDATES</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-text-secondary hover:text-brand-cyan transition-colors">Contact Us</Link>
+                <Link to="/contact" className="text-text-secondary hover:text-brand-cyan transition-colors">CONTACT US</Link>
               </li>
             </ul>
           </div>
