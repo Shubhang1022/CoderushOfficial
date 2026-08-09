@@ -163,7 +163,7 @@ export const Team: React.FC = () => {
                 <div>
                   <h4 className="font-heading font-bold text-white text-xs sm:text-sm line-clamp-1">{member.name}</h4>
                   <p className="text-[11px] text-brand-cyan font-mono mt-0.5">{member.role}</p>
-                  <p className="text-[10px] text-text-muted">{member.department}</p>
+                  <p className="text-[11px] text-text-muted mt-1 font-mono">{member.department}{member.year ? ` • ${member.year}` : ''}</p>
                 </div>
               </div>
             ))}
