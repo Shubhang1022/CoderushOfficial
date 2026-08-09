@@ -19,8 +19,8 @@ export const Footer: React.FC = () => {
           <div className="md:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-brand-blue to-brand-cyan p-[1px] flex items-center justify-center overflow-hidden">
-                <div className="w-full h-full bg-[#080B12] rounded-full flex items-center justify-center overflow-hidden">
-                  <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-cover" />
+                <div className="w-full h-full bg-[#04060A] rounded-full flex items-center justify-center overflow-hidden">
+                  <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-contain p-[1px]" />
                 </div>
               </div>
               <div>

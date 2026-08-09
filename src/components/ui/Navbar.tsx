@@ -51,8 +51,8 @@ export const Navbar: React.FC = () => {
           {/* Logo Left */}
           <Link to="/" className="flex items-center gap-3 group">
             <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-brand-blue to-brand-cyan p-[1px] flex items-center justify-center shadow-glow-blue group-hover:scale-105 transition-transform overflow-hidden">
-              <div className="w-full h-full bg-[#080B12] rounded-full flex items-center justify-center overflow-hidden">
-                <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-cover" />
+              <div className="w-full h-full bg-[#04060A] rounded-full flex items-center justify-center overflow-hidden">
+                <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-contain p-[1px]" />
               </div>
             </div>
             <div>

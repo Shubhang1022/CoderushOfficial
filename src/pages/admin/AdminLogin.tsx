@@ -36,9 +36,9 @@ export const AdminLogin: React.FC = () => {
 
       <div className="w-full max-w-md card-dark rounded-3xl p-8 border border-white/10 shadow-2xl relative z-10 space-y-6">
         <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-tr from-brand-blue to-brand-cyan p-[1px] flex items-center justify-center mx-auto shadow-glow-blue overflow-hidden">
-            <div className="w-full h-full bg-[#080B12] rounded-full flex items-center justify-center overflow-hidden">
-              <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-cover" />
+          <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-brand-blue to-brand-cyan p-[1px] flex items-center justify-center mx-auto shadow-glow-blue overflow-hidden">
+            <div className="w-full h-full bg-[#04060A] rounded-full flex items-center justify-center overflow-hidden">
+              <img src="/coderush_logo.jpg" alt="CodeRush Logo" className="w-full h-full object-contain p-[1px]" />
             </div>
           </div>
           <h1 className="text-2xl font-heading font-bold text-white">CodeRush CMS Admin</h1>
